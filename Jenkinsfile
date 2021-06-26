@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        registry = "rikumabokss/demoritesh.git"
+        registry = "magalixcorp/k8scicd"
         GOCACHE = "/tmp"
     }
     stages {
@@ -52,4 +52,14 @@ pipeline {
                     }
                 }
             }
-        
+        }
+        stage ('Deploy') {
+            steps {
+                script{
+                    def image_id = registry + ":$BUILD_NUMBER"
+                    sh "ansible-playbook  playbook.yml --extra-vars \"image_id=${image_id}\""
+                }
+            }
+        }
+    }
+}
